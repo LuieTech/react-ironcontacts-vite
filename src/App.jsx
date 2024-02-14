@@ -2,6 +2,8 @@ import { useState } from "react";
 import "./App.css";
 import contactsData from "./contacts.json"
 
+// let nameOrientation = true;
+
 
 function App() {
 
@@ -43,17 +45,27 @@ function App() {
     });
     setContacts(sortedContacts)
     setNameOrientation(!nameOrientation)
+    // nameOrientation = !nameOrientation
 
   }
 
   const handleOnsortPopularity = () => {
     
-    const sortedPopularity = [...contacts].sort((a,b) => {
-      return popularityOrientation ? a.popularity - b.popularity : b.popularity - a.popularity
-    })
-    setContacts(sortedPopularity)
-    setPopularityOrientation(!popularityOrientation)
+    // const sortedPopularity = [...contacts].sort((a,b) => {
+    //   return popularityOrientation ? a.popularity - b.popularity : b.popularity - a.popularity
+    // })
+    // setContacts(sortedPopularity)
+    // setPopularityOrientation(!popularityOrientation)
 
+    setContacts( contacts => 
+        [...contacts].sort((a,b) => popularityOrientation ? a.popularity - b.popularity : b.popularity - a.popularity)  
+      )
+      setPopularityOrientation(!popularityOrientation)
+
+  }
+
+  const handleDelete = (deleteId) => {
+    setContacts([...contacts].filter(contact => contact.id !== deleteId))
   }
 
 
@@ -73,6 +85,8 @@ function App() {
             <th>Popularity</th>
             <th>Won Oscar</th>
             <th>Won Emmy</th>
+            <th>Actions</th>
+
           </tr>
         </thead>
         <tbody>
@@ -83,6 +97,7 @@ function App() {
               <td>{contact.popularity.toFixed(2)}</td>
               <td className="text-center">{contact.wonOscar ? "🏆" : ""}</td>
               <td className="text-center">{contact.wonEmmy ? " 🌟" : ""}</td>
+              <td><button className="btn btn-danger" onClick={() => handleDelete(contact.id)}>Delete</button></td>
             </tr>
           ))}
         </tbody>
